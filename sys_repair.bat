@@ -18,10 +18,12 @@ echo 3. Repair System Image (/RestoreHealth)
 echo 4. Scan and Repair System Files (sfc /scannow)
 echo 5. System Update Repair
 echo 6. Run All Sequentially
-echo 7. Help - Command Descriptions
-echo 8. Exit
+echo 7. Restart System
+echo 8. Restart System Goto BIOS
+echo 9. Help - Command Descriptions
+echo 10. Exit
 echo =======================================
-set /p choice=Select an option (1-8): 
+set /p choice=Select an option (1-10): 
 
 if "%choice%"=="1" goto checkhealth
 if "%choice%"=="2" goto scanhealth
@@ -29,8 +31,10 @@ if "%choice%"=="3" goto restorehealth
 if "%choice%"=="4" goto sfcscan
 if "%choice%"=="5" goto updatefix
 if "%choice%"=="6" goto all
-if "%choice%"=="7" goto help
-if "%choice%"=="8" exit
+if "%choice%"=="7" goto restart
+if "%choice%"=="8" goto restartbios
+if "%choice%"=="9" goto help
+if "%choice%"=="10" exit
 
 echo Invalid option, please try again.
 echo.
@@ -138,6 +142,16 @@ call :updatefix
 echo All commands completed.
 pause
 goto menu
+
+:restart 
+echo Restarting System...
+shutdown /r /t 0
+exit
+
+:restartbios
+echo Restarting System to BIOS...
+shutdown /r /fw /t 0
+exit
 
 :help
 cls
