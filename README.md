@@ -17,7 +17,7 @@ A comprehensive batch script for diagnosing and repairing Windows system issues.
   - Component re-registration
   - Network reset
   - Driver cleanup
-- **All-in-One Option**: Sequential execution of all repair operations
+- **Sequential Repair Mode**: Optimized execution of core repair operations with automatic restart recommendation
 - **Interactive Menu**: User-friendly interface with detailed help section
 
 ## 🚀 Getting Started
@@ -39,56 +39,61 @@ cd path/to/script
 sys_repair.bat
 ```
 
+
 ## 💻 Usage
 
 The script presents an interactive menu with the following options:
 
 1. **Quick Status Check** (`DISM /CheckHealth`)
-
    - Fast verification of system image integrity
    - Recommended as first diagnostic step
 
 2. **Detailed Scan** (`DISM /ScanHealth`)
-
    - Thorough system image analysis
    - May take several minutes to complete
 
 3. **Repair System Image** (`DISM /RestoreHealth`)
-
    - Attempts to repair corrupted system files
    - Downloads replacement files if needed
    - Can take 15-30 minutes depending on system state
 
 4. **System File Checker** (`sfc /scannow`)
-
    - Scans and repairs corrupted Windows system files
    - Recommended after DISM repairs
 
 5. **System Update Repair**
-
    - Comprehensive Windows Update troubleshooting
    - Resets update-related services and components
    - Cleans up driver cache
    - Repairs network settings
 
-6. **Run All Sequentially**
-   - Executes all repair operations in optimal order
-   - Recommended for thorough system maintenance
+6. **Run commands 2, 3, 4 Sequentially**
+   - Executes the three core repair commands in optimal order:
+     - **DISM /ScanHealth** (Detailed system scan)
+     - **DISM /RestoreHealth** (Image repair)
+     - **sfc /scannow** (System file verification)
+   - **Always recommends a system restart** after completion to ensure repairs take effect
+   - Does not include Windows Update repair operations
 
 ## ⚠️ Important Notes
 
 - **Always backup important data** before running system repairs
 - **Requires administrator privileges** to execute repairs
-- Some operations may require system restart
+- **System restart is recommended** after running sequential repairs, regardless of individual command results
 - Windows Update repairs may temporarily disable update services
 - Internet connection required for downloading system files during repair
+- The sequential repair mode follows Microsoft's recommended execution order for optimal results
 
 ## 🔧 Technical Details
 
 The script performs the following technical operations:
 
-- DISM (Deployment Image Servicing and Management) operations
-- System File Checker (SFC) scans
+### Core Repair Commands (Sequential Mode)
+- **DISM ScanHealth**: Detects Windows image corruption
+- **DISM RestoreHealth**: Repairs Windows component store using Windows Update
+- **SFC scannow**: Verifies and repairs individual system files
+
+### Windows Update Repair Operations
 - Service management (stop/start) for:
   - Background Intelligent Transfer Service (BITS)
   - Windows Update Service
@@ -99,6 +104,16 @@ The script performs the following technical operations:
 - Network stack reset
 - Driver state management
 - Windows component cleanup
+
+## 📋 Command Execution Order
+
+The sequential repair mode follows Microsoft's recommended order:
+
+1. **DISM /ScanHealth** - Identifies corruption in the Windows image
+2. **DISM /RestoreHealth** - Repairs the Windows component store 
+3. **sfc /scannow** - Repairs individual system files using the clean component store
+
+This hierarchical approach ensures each tool can function optimally and repairs proceed from the foundational Windows image level down to individual system files.
 
 ## 🤝 Contributing
 
@@ -121,5 +136,7 @@ If you encounter issues:
 1. Ensure you're running as administrator
 2. Check internet connectivity for file downloads
 3. Verify Windows Update service is accessible
-4. Check system drive for sufficient space
+4. Check system drive for sufficient space (at least 2GB free recommended)
 5. Review logs in `%windir%\Logs\DISM\dism.log`
+6. If sequential repairs don't resolve issues, try running individual commands separately
+7. For persistent corruption, consider Windows in-place upgrade or system restore
