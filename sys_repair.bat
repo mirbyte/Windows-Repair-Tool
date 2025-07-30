@@ -12,7 +12,7 @@ if %errorlevel% neq 0 (
 :menu
 cls
 echo =======================================
-echo System Health Check Menu
+echo       System Health Check Menu
 echo =======================================
 echo 1. Quick Status Check (/CheckHealth)
 echo 2. Detailed Scan (/ScanHealth)
